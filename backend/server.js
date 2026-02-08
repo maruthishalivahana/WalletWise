@@ -59,6 +59,16 @@ app.use((req, res, next) => {
     next();
 });
 
+// ==================== RATE LIMITING ====================
+const { globalLimiter, authLimiter } = require('./middleware/rateLimiter');
+
+// Apply global rate limiter to all requests
+app.use(globalLimiter);
+
+// Apply stricter rate limiter to auth routes
+app.use('/api/auth', authLimiter);
+
+
 // ==================== DATABASE CONNECTION ====================
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/walletwise';
 
